@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href='/css/bootstrap.min.css' />
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3 col-md-3">
+      </div>
+      <div class = "col-sm-6 col-md-6">
+        <div class="row">
+          <h1><%= title %></h1>
+          <p>Welcome to <%= title %></p>
+          <label>Enter Your Name</label>
+          <input class="form-control" id="nameoftesttaker" type="text">
+        </div>
+        <% questions.forEach(function (el, idx){ %>
+
+            <p>Question <%= idx+1 %> </p>
+              <span><%= el.question %></span>
+              <% el.options.forEach(function (ele){ %>
+                <div class="radio">
+                  <label><input type="radio"  name='<%= idx+1 %>' value="<%= ele %>" data-question-id="<%= el._id %>" ><%= ele %></label>
+                </div>
+              <% }) %>
+
+
+        <% }) %>
+        <div class="row">
+            <center>
+              <button type="button" class="btn btn-primary" id="submit" style="width: 250px">SUBMIT</button>
+            <center>
+        </div>
+      </div>
+      <div class="col-sm-3 col-md-3">
+      </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script type="text/javascript">
+
+    $("#submit").click(function (evt) {
+        evt.preventDefault();
+
+        var arrData = [];
+        // var timenow = $()
+        //console.log(new Date($.now()));
+
+
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+        var nameOfperson = $('#nameoftesttaker').val();
+        console.log(nameOfperson);
+
+
+        for( var x = 1; x <= 5; x++){
+          //console.log(typeof x.toString() )
+          var givenAnswer = ($("input[name = "+x.toString()+" ]:checked").val());
+          var questionId = $("input[name = "+x.toString()+" ]:checked").data('question-id');
+          //console.log(givenAnswer+questionId);
+        //  $(".qid").attr("id");
+
+          var obj = {
+            answered : givenAnswer,
+            forQuestion : questionId,
+          }
+
+          arrData.push(obj);
+        }
+
+        $.ajax({
+          url : '/logic',
+          type : 'POST',
+          data :{
+              quizData : arrData,
+              nameOfParticipant : nameOfperson ,
+              time : time
+          },
+          success : function (result){
+            if(!result.error){
+              //alert(result.idOfRecentParticipant);
+              window.location.href = '/leaderboard/'+result.idOfRecentParticipant;
+            }
+          }
+        });
+
+    });
+      // $('#submit').click(function (evt){
+      //     evt.preventDefault();
+      //
+      //
+      // })
+  </script>
+  </body>
+</html>

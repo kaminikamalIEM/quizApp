@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href='/css/bootstrap.min.css' />
+  </head>
+  <body>
+    <div class="container">
+        <div class = "col-sm-3 col-md-3">
+        </div>
+        <div class = "col-sm-6 col-md-6">
+            <div class = "row">
+                <h1><%= title %></h1>
+                <p>Welcome to <%= title %></p>
+
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Serial No.</th>
+                      <th>Name Of the Participant</th>
+                      <th>Time of Quiz Taken</th>
+                      <th>Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <% participants.forEach( function (ele, idx){ %>
+                          <% if ( currentOn !== undefined && currentOn == ele._id) { %>
+                            <tr style="background-color : yellow">
+                                <td><%= idx+1 %></td>
+                                <td><%= ele.name %></td>
+                                <td><%= ele.time %></td>
+                                <td><%= ele.score %></td>
+                            </tr>
+                          <% } else {%>
+                            <tr>
+                                <td><%= idx+1 %></td>
+                                <td><%= ele.name %></td>
+                                <td><%= ele.time %></td>
+                                <td><%= ele.score %></td>
+                            </tr>
+                            <% } %>
+
+                      <% }) %>
+                  </tbody>
+            </div>
+        </div>
+        <div class = "col-sm-3 col-md-3">
+        </div>
+    </div>
+  </body>
+</html>
